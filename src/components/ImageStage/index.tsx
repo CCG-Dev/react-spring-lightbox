@@ -1,15 +1,19 @@
-import ImagePager from './components/ImagePager';
 import React from 'react';
+
 import styled from 'styled-components';
-import useRefSize from './utils/useRefSize';
+
 import type { ImagesList } from '../../types/ImagesList';
+import ImagePager from './components/ImagePager';
 import SSRImagePager from './components/SSRImagePager/SSRImagePager';
+import useRefSize from './utils/useRefSize';
 
 type IImageStageProps = {
     /** classnames are applied to the root ImageStage component */
     className?: string;
     /** Index of image in images array that is currently shown */
     currentIndex: number;
+    /** Overrides the default behavior of mousewheel */
+    disableMouseWheel?: boolean;
     /** Array of image objects to be shown in Lightbox */
     images: ImagesList;
     /** Affects Width calculation method, depending on whether the Lightbox is Inline or not */
@@ -36,6 +40,7 @@ type IImageStageProps = {
 const ImageStage = ({
     className = '',
     currentIndex,
+    disableMouseWheel,
     images,
     inline,
     onClose,
@@ -66,6 +71,7 @@ const ImageStage = ({
             {containerWidth ? (
                 <ImagePager
                     currentIndex={currentIndex}
+                    disableMouseWheel={disableMouseWheel}
                     images={images}
                     imageStageHeight={containerHeight}
                     imageStageWidth={containerWidth}

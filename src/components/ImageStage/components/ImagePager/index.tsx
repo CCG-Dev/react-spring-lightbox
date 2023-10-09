@@ -1,13 +1,25 @@
-import { animated, useSprings } from '@react-spring/web';
+import React, {
+    useEffect,
+    useRef,
+    useState,
+} from 'react';
+
 import { useGesture } from 'react-use-gesture';
-import Image from '../Image';
-import React, { useEffect, useRef, useState } from 'react';
 import styled, { AnyStyledComponent } from 'styled-components';
+
+import {
+    animated,
+    useSprings,
+} from '@react-spring/web';
+
 import type { ImagesList } from '../../../../types/ImagesList';
+import Image from '../Image';
 
 type IImagePager = {
     /** Index of image in images array that is currently shown */
     currentIndex: number;
+    /** Overrides the default behavior of mousewheel */
+    disableMouseWheel?: boolean;
     /** image stage height */
     imageStageHeight: number;
     /** image stage width */
@@ -33,6 +45,7 @@ type IImagePager = {
  */
 const ImagePager = ({
     currentIndex,
+    disableMouseWheel,
     images,
     imageStageHeight,
     imageStageWidth,
@@ -169,6 +182,10 @@ const ImagePager = ({
 
                 if (!isDragging) {
                     setIsDragging(true);
+                }
+                console.log('onWheel', disableMouseWheel);
+                if (disableMouseWheel) {
+                    return;
                 }
 
                 const draggedFastEnough = velocity > 1.1;
