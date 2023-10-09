@@ -183,7 +183,7 @@ const ImagePager = ({
                 if (!isDragging) {
                     setIsDragging(true);
                 }
-                console.log('onWheel', disableMouseWheel);
+
                 if (disableMouseWheel) {
                     return;
                 }

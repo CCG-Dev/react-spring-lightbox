@@ -6,6 +6,10 @@ All notable changes to this project will be documented in this file.
 
 -   Add `swipe up` to close lightbox
 
+## [1.8.1] - 2023-10-09
+
+-   Add disableMouseWheel property
+
 ## [1.8.0] - 2023-10-06
 
 -   Add inline mode SSR support
