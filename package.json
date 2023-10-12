@@ -36,10 +36,7 @@
         "lint:ts": "npx tsc --noEmit -p .",
         "test": "jest",
         "test:watch": "jest --watch",
-        "build": "rollup --config && yarn run build:types",
-        "build:types": "tsc --project tsconfig.buildtypes.json --emitDeclarationOnly",
-        "start": "rollup --config --watch",
-        "prepare": "yarn run build"
+        "start": "rollup --config --watch"
     },
     "husky": {
         "hooks": {
