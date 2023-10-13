@@ -1,13 +1,16 @@
+import React, { useEffect, useRef, useState } from 'react';
+
+import { useGesture } from 'react-use-gesture';
+import styled, { AnyStyledComponent } from 'styled-components';
+
 import { animated, to, useSpring } from '@react-spring/web';
+
+import type { ImagesListItem } from '../../../../types/ImagesList';
 import {
     getTranslateOffsetsFromScale,
     imageIsOutOfBounds,
     useDoubleClick,
 } from '../../utils';
-import { useGesture } from 'react-use-gesture';
-import React, { useEffect, useRef, useState } from 'react';
-import styled, { AnyStyledComponent } from 'styled-components';
-import type { ImagesListItem } from '../../../../types/ImagesList';
 
 const defaultImageTransform = {
     pinching: false,
@@ -46,6 +49,7 @@ const Image = ({
     singleClickToZoom,
 }: IImageProps) => {
     const [isPanningImage, setIsPanningImage] = useState<boolean>(false);
+    const [loading, setLoading] = useState<boolean>(true);
     const imageRef = useRef<HTMLImageElement>(null);
 
     /**
@@ -283,34 +287,38 @@ const Image = ({
         latency: singleClickToZoom ? 0 : 200,
         ref: imageRef,
     });
-
     return (
-        <AnimatedImage
-            $inline={inline}
-            className="lightbox-image"
-            draggable="false"
-            onClick={(e: React.MouseEvent<HTMLImageElement>) => {
-                // Don't close lighbox when clicking image
-                e.stopPropagation();
-                e.nativeEvent.stopImmediatePropagation();
-            }}
-            onDragStart={(e: React.DragEvent<HTMLImageElement>) => {
-                // Disable image ghost dragging in firefox
-                e.preventDefault();
-            }}
-            ref={imageRef}
-            style={{
-                ...imgStyleProp,
-                maxHeight: pagerHeight,
-                transform: to(
-                    [scale, translateX, translateY],
-                    (s, x, y) => `translate(${x}px, ${y}px) scale(${s})`,
-                ),
-                ...(isCurrentImage && { willChange: 'transform' }),
-            }}
-            // Include any valid img html attributes provided in the <Lightbox /> images prop
-            {...(restImgProps as React.ComponentProps<typeof animated.img>)}
-        />
+        <>
+            <AnimatedImage
+                $inline={inline}
+                $loading={loading}
+                className="lightbox-image"
+                draggable="false"
+                onClick={(e: React.MouseEvent<HTMLImageElement>) => {
+                    // Don't close lighbox when clicking image
+                    e.stopPropagation();
+                    e.nativeEvent.stopImmediatePropagation();
+                }}
+                onDragStart={(e: React.DragEvent<HTMLImageElement>) => {
+                    // Disable image ghost dragging in firefox
+                    e.preventDefault();
+                }}
+                onLoad={() => setLoading(false)}
+                ref={imageRef}
+                style={{
+                    ...imgStyleProp,
+                    maxHeight: pagerHeight,
+                    transform: to(
+                        [scale, translateX, translateY],
+                        (s, x, y) => `translate(${x}px, ${y}px) scale(${s})`,
+                    ),
+                    ...(isCurrentImage && { willChange: 'transform' }),
+                }}
+                // Include any valid img html attributes provided in the <Lightbox /> images prop
+                {...(restImgProps as React.ComponentProps<typeof animated.img>)}
+            />
+            {loading && <LoadingSpinner />}
+        </>
     );
 };
 
@@ -324,7 +332,34 @@ const AnimatedImage = styled(animated.img as AnyStyledComponent)`
     max-width: 100%;
     user-select: none;
     touch-action: ${({ $inline }) => (!$inline ? 'none' : 'pan-y')};
+    ${({ $loading }) => ($loading ? 'display: none;' : '')}
     ::selection {
         background: none;
+    }
+`;
+
+const LoadingSpinner = styled.div`
+    display: inline-block;
+    width: 80px;
+    height: 80px;
+
+    &:after {
+        content: ' ';
+        display: block;
+        width: 64px;
+        height: 64px;
+        margin: 8px;
+        border-radius: 50%;
+        border: 6px solid #fff;
+        border-color: #fff transparent #fff transparent;
+        animation: lds-dual-ring 1.2s linear infinite;
+    }
+    @keyframes lds-dual-ring {
+        0% {
+            transform: rotate(0deg);
+        }
+        100% {
+            transform: rotate(360deg);
+        }
     }
 `;
