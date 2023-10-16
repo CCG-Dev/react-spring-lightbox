@@ -7,6 +7,8 @@ type IImageProps = {
     inline: boolean;
     /** True if this image is currently shown in pager, otherwise false */
     isCurrentImage: boolean;
+    /** A React component that is rendered when the image is loading */
+    loadingComponent?: React.ReactNode;
     /** Fixed height of the image stage, used to restrict maximum height of images */
     pagerHeight: '100%' | number;
     /** Indicates parent ImagePager is in a state of dragging, if true click to zoom is disabled */
@@ -20,7 +22,7 @@ type IImageProps = {
  * Animates pinch-zoom + panning on image using spring physics
  */
 declare const Image: {
-    ({ imgProps: { style: imgStyleProp, ...restImgProps }, inline, isCurrentImage, pagerHeight, pagerIsDragging, setDisableDrag, singleClickToZoom, }: IImageProps): React.JSX.Element;
+    ({ imgProps: { style: imgStyleProp, ...restImgProps }, inline, isCurrentImage, loadingComponent, pagerHeight, pagerIsDragging, setDisableDrag, singleClickToZoom, }: IImageProps): React.JSX.Element;
     displayName: string;
 };
 export default Image;

@@ -145,7 +145,7 @@ const HomePage = () => {
     return (
         <Container>
             <GalleryLightboxExample>
-                <StyledH2>Gallery Lightbox</StyledH2>
+                <StyledH2>Gallery Lightbox -</StyledH2>
                 <GalleryLightbox
                     galleryTitle="Dark Mode: OS Level Control In Your CSS"
                     imageMasonryDirection="column"

@@ -120,6 +120,7 @@ class BlogImageGallery extends React.Component {
                 )}
                 <StyledLightbox
                     currentIndex={currentImageIndex}
+                    disableMouseWheel={true}
                     galleryTitle={galleryTitle}
                     images={listboxImages}
                     isOpen={lightboxIsOpen}

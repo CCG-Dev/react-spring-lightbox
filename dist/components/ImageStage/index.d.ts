@@ -11,6 +11,8 @@ type IImageStageProps = {
     images: ImagesList;
     /** Affects Width calculation method, depending on whether the Lightbox is Inline or not */
     inline: boolean;
+    /** A React component that is rendered when the image is loading */
+    loadingComponent?: React.ReactNode;
     /** Function that closes the Lightbox */
     onClose?: () => void;
     /** Function that can be called to disable dragging in the pager */
@@ -33,5 +35,5 @@ type IImageStageProps = {
 /**
  * Containing element for ImagePager and prev/next button controls
  */
-declare const ImageStage: ({ className, currentIndex, disableMouseWheel, images, inline, onClose, onNext, onPrev, renderImageOverlay, renderNextButton, renderPrevButton, singleClickToZoom, }: IImageStageProps) => React.JSX.Element;
+declare const ImageStage: ({ className, currentIndex, disableMouseWheel, images, inline, loadingComponent, onClose, onNext, onPrev, renderImageOverlay, renderNextButton, renderPrevButton, singleClickToZoom, }: IImageStageProps) => React.JSX.Element;
 export default ImageStage;

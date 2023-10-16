@@ -10,6 +10,8 @@ type ILightboxProps = {
     className?: string;
     /** Index of image in images array that is currently shown */
     currentIndex: number;
+    /** Overrides the default behavior of mousewheel */
+    disableMouseWheel?: boolean;
     /** Array of images to be shown in Lightbox, each image object may contain any valid 'img' attribute with the exceptions of 'draggable', 'onClick', 'onDragStart' and 'ref' */
     images: ImagesList;
     /** Determines whether the Lightbox returns just an Inline carousel (ImageStage) */
@@ -59,6 +61,7 @@ type ILightboxProps = {
 const Lightbox = ({
     className = '',
     currentIndex,
+    disableMouseWheel = false,
     images = [],
     inline = false,
     isOpen,
@@ -128,6 +131,7 @@ const Lightbox = ({
     const imageStage = (
         <ImageStage
             currentIndex={currentIndex}
+            disableMouseWheel={disableMouseWheel}
             images={images}
             inline={inline}
             loadingComponent={loadingComponent}

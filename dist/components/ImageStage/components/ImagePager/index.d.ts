@@ -13,6 +13,8 @@ type IImagePager = {
     images: ImagesList;
     /** Affects Width calculation method, depending on whether the Lightbox is Inline or not */
     inline: boolean;
+    /** A React component that is rendered when the image is loading */
+    loadingComponent?: React.ReactNode;
     /** Function that closes the Lightbox */
     onClose?: () => void;
     /** Function that can be called to disable dragging in the pager */
@@ -28,7 +30,7 @@ type IImagePager = {
  * Gesture controlled surface that animates prev/next page changes via spring physics.
  */
 declare const ImagePager: {
-    ({ currentIndex, disableMouseWheel, images, imageStageHeight, imageStageWidth, inline, onClose, onNext, onPrev, renderImageOverlay, singleClickToZoom, }: IImagePager): React.JSX.Element;
+    ({ currentIndex, disableMouseWheel, images, imageStageHeight, imageStageWidth, inline, loadingComponent, onClose, onNext, onPrev, renderImageOverlay, singleClickToZoom, }: IImagePager): React.JSX.Element;
     displayName: string;
 };
 export default ImagePager;

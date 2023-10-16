@@ -12,6 +12,8 @@ type IImageStageProps = {
     className?: string;
     /** Index of image in images array that is currently shown */
     currentIndex: number;
+    /** Overrides the default behavior of mousewheel */
+    disableMouseWheel?: boolean;
     /** Array of image objects to be shown in Lightbox */
     images: ImagesList;
     /** Affects Width calculation method, depending on whether the Lightbox is Inline or not */
@@ -40,6 +42,7 @@ type IImageStageProps = {
 const ImageStage = ({
     className = '',
     currentIndex,
+    disableMouseWheel,
     images,
     inline,
     loadingComponent,
@@ -71,6 +74,7 @@ const ImageStage = ({
             {containerWidth ? (
                 <ImagePager
                     currentIndex={currentIndex}
+                    disableMouseWheel={disableMouseWheel}
                     images={images}
                     imageStageHeight={containerHeight}
                     imageStageWidth={containerWidth}

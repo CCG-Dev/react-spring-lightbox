@@ -11,6 +11,8 @@ import Image from '../Image';
 type IImagePager = {
     /** Index of image in images array that is currently shown */
     currentIndex: number;
+    /** Overrides the default behavior of mousewheel */
+    disableMouseWheel?: boolean;
     /** image stage height */
     imageStageHeight: number;
     /** image stage width */
@@ -38,6 +40,7 @@ type IImagePager = {
  */
 const ImagePager = ({
     currentIndex,
+    disableMouseWheel,
     images,
     imageStageHeight,
     imageStageWidth,
@@ -176,6 +179,8 @@ const ImagePager = ({
                 if (!isDragging) {
                     setIsDragging(true);
                 }
+
+                if (disableMouseWheel) return;
 
                 const draggedFastEnough = velocity > 1.1;
 

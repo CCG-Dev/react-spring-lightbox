@@ -14,6 +14,8 @@ type ILightboxProps = {
     inline?: boolean;
     /** Flag that dictates if the lightbox is open or closed */
     isOpen: boolean;
+    /** A React component that is rendered when the image is loading */
+    loadingComponent?: React.ReactNode;
     /** Function that closes the Lightbox */
     onClose?: () => void;
     /** Function that changes currentIndex to next image in images */
@@ -55,5 +57,5 @@ type ILightboxProps = {
  * @see https://github.com/react-spring/react-spring
  * @see https://github.com/styled-components/styled-components
  */
-declare const Lightbox: ({ className, currentIndex, disableMouseWheel, images, inline, isOpen, onClose, onNext, onPrev, pageTransitionConfig, renderFooter, renderHeader, renderImageOverlay, renderNextButton, renderPrevButton, singleClickToZoom, style, }: ILightboxProps) => React.JSX.Element;
+declare const Lightbox: ({ className, currentIndex, disableMouseWheel, images, inline, isOpen, loadingComponent, onClose, onNext, onPrev, pageTransitionConfig, renderFooter, renderHeader, renderImageOverlay, renderNextButton, renderPrevButton, singleClickToZoom, style, }: ILightboxProps) => React.JSX.Element;
 export default Lightbox;
