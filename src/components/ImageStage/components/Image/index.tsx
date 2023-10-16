@@ -45,7 +45,7 @@ const Image = ({
     imgProps: { style: imgStyleProp, ...restImgProps },
     inline,
     isCurrentImage,
-    loadingComponent: customLoadingComponent,
+    loadingComponent,
     pagerHeight,
     pagerIsDragging,
     setDisableDrag,
@@ -290,6 +290,7 @@ const Image = ({
         latency: singleClickToZoom ? 0 : 200,
         ref: imageRef,
     });
+
     return (
         <>
             <AnimatedImage
@@ -321,7 +322,15 @@ const Image = ({
                 // Include any valid img html attributes provided in the <Lightbox /> images prop
                 {...(restImgProps as React.ComponentProps<typeof animated.img>)}
             />
-            {loading && <>{customLoadingComponent || LoadingSpinner}</>}
+            {loading && (
+                <>
+                    {loadingComponent ? (
+                        (loadingComponent as React.ReactElement)
+                    ) : (
+                        <LoadingSpinner />
+                    )}
+                </>
+            )}
         </>
     );
 };
@@ -359,7 +368,7 @@ const LoadingSpinner = styled.div`
     height: 80px;
 
     &:after {
-        content: ' ';
+        content: '';
         display: block;
         width: 64px;
         height: 64px;
