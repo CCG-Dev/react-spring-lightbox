@@ -26,6 +26,8 @@ type IImageProps = {
     inline: boolean;
     /** True if this image is currently shown in pager, otherwise false */
     isCurrentImage: boolean;
+    /** A React component that is rendered when the image is loading */
+    loadingComponent?: React.ReactNode;
     /** Fixed height of the image stage, used to restrict maximum height of images */
     pagerHeight: '100%' | number;
     /** Indicates parent ImagePager is in a state of dragging, if true click to zoom is disabled */
@@ -43,6 +45,7 @@ const Image = ({
     imgProps: { style: imgStyleProp, ...restImgProps },
     inline,
     isCurrentImage,
+    loadingComponent: customLoadingComponent,
     pagerHeight,
     pagerIsDragging,
     setDisableDrag,
@@ -304,6 +307,7 @@ const Image = ({
                     e.preventDefault();
                 }}
                 onLoad={() => setLoading(false)}
+                onLoadStart={() => setLoading(true)}
                 ref={imageRef}
                 style={{
                     ...imgStyleProp,
@@ -317,7 +321,7 @@ const Image = ({
                 // Include any valid img html attributes provided in the <Lightbox /> images prop
                 {...(restImgProps as React.ComponentProps<typeof animated.img>)}
             />
-            {loading && <LoadingSpinner />}
+            {loading && <>{customLoadingComponent || LoadingSpinner}</>}
         </>
     );
 };
@@ -332,7 +336,18 @@ const AnimatedImage = styled(animated.img as AnyStyledComponent)`
     max-width: 100%;
     user-select: none;
     touch-action: ${({ $inline }) => (!$inline ? 'none' : 'pan-y')};
-    ${({ $loading }) => ($loading ? 'display: none;' : '')}
+    transition: opacity 0.25s ease-out;
+    ${({ $loading }) =>
+        $loading
+            ? `
+            width: 0;
+    height: 0;
+        opacity: 0;
+    `
+            : `
+            opacity: 1;
+      
+            `}
     ::selection {
         background: none;
     }

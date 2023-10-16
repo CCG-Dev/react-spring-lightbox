@@ -571,9 +571,13 @@ react-photo-gallery@^8.0.0:
     prop-types "~15.7.2"
     resize-observer-polyfill "^1.5.0"
 
-"react-spring-lightbox@link:..":
-  version "0.0.0"
-  uid ""
+"react-spring-lightbox@https://github.com/CCG-Dev/react-spring-lightbox#b4cb05285a7c222949ab5b2fa0acc01947502869":
+  version "1.8.0"
+  resolved "https://github.com/CCG-Dev/react-spring-lightbox#b4cb05285a7c222949ab5b2fa0acc01947502869"
+  dependencies:
+    "@babel/runtime" "^7.23.1"
+    "@react-spring/web" "^9.7.3"
+    react-use-gesture "9.1.3"
 
 react-use-gesture@9.1.3:
   version "9.1.3"

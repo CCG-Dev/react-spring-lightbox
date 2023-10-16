@@ -1,5 +1,7 @@
 import * as React from 'react';
+
 import styled from 'styled-components';
+
 import GalleryLightbox from '../components/GalleryLightbox';
 import InlineLightbox from '../components/InlineLightbox';
 

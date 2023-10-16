@@ -1,9 +1,11 @@
-import ImagePager from './components/ImagePager';
 import React from 'react';
+
 import styled from 'styled-components';
-import useRefSize from './utils/useRefSize';
+
 import type { ImagesList } from '../../types/ImagesList';
+import ImagePager from './components/ImagePager';
 import SSRImagePager from './components/SSRImagePager/SSRImagePager';
+import useRefSize from './utils/useRefSize';
 
 type IImageStageProps = {
     /** classnames are applied to the root ImageStage component */
@@ -14,6 +16,8 @@ type IImageStageProps = {
     images: ImagesList;
     /** Affects Width calculation method, depending on whether the Lightbox is Inline or not */
     inline: boolean;
+    /** A React component that is rendered when the image is loading */
+    loadingComponent?: React.ReactNode;
     /** Function that closes the Lightbox */
     onClose?: () => void;
     /** Function that can be called to disable dragging in the pager */
@@ -38,6 +42,7 @@ const ImageStage = ({
     currentIndex,
     images,
     inline,
+    loadingComponent,
     onClose,
     onNext,
     onPrev,
@@ -70,6 +75,7 @@ const ImageStage = ({
                     imageStageHeight={containerHeight}
                     imageStageWidth={containerWidth}
                     inline={inline}
+                    loadingComponent={loadingComponent}
                     onClose={onClose}
                     onNext={onNextImage}
                     onPrev={onPrevImage}

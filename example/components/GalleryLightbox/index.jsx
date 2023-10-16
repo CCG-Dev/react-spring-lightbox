@@ -1,13 +1,14 @@
-import { FiHeart, FiPrinter, FiShare } from 'react-icons/fi';
 import React from 'react';
-import PropTypes from 'prop-types';
-import styled from 'styled-components';
+
 import Color from 'color';
+import PropTypes from 'prop-types';
 import Gallery from 'react-photo-gallery';
 import Lightbox from 'react-spring-lightbox';
+import styled from 'styled-components';
+
 import GridImage from './components/GridImage';
-import LightboxHeader from './components/LightboxHeader';
 import LightboxArrowButton from './components/LightboxArrowButton';
+import LightboxHeader from './components/LightboxHeader';
 
 class BlogImageGallery extends React.Component {
     static propTypes = {
@@ -132,14 +133,6 @@ class BlogImageGallery extends React.Component {
                             images={images}
                             onClose={this.closeLightbox}
                         />
-                    )}
-                    renderImageOverlay={() => (
-                        <ImageOverlay>
-                            <p>Create your own UI</p>
-                            <FiPrinter size="3em" />
-                            <FiShare size="3em" />
-                            <FiHeart size="3em" />
-                        </ImageOverlay>
                     )}
                     renderNextButton={({ canNext }) => (
                         <LightboxArrowButton

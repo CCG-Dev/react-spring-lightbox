@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
-import { ImageStage, PageContainer, CreatePortal } from './components';
+
+import { CreatePortal, ImageStage, PageContainer } from './components';
 import type { ImagesList } from './types/ImagesList';
 
 export type ImagesListType = ImagesList;
@@ -15,6 +16,8 @@ type ILightboxProps = {
     inline?: boolean;
     /** Flag that dictates if the lightbox is open or closed */
     isOpen: boolean;
+    /** A React component that is rendered when the image is loading */
+    loadingComponent?: React.ReactNode;
     /** Function that closes the Lightbox */
     onClose?: () => void;
     /** Function that changes currentIndex to next image in images */
@@ -59,6 +62,7 @@ const Lightbox = ({
     images = [],
     inline = false,
     isOpen,
+    loadingComponent = null,
     onClose,
     onNext,
     onPrev,
@@ -126,6 +130,7 @@ const Lightbox = ({
             currentIndex={currentIndex}
             images={images}
             inline={inline}
+            loadingComponent={loadingComponent}
             onClose={onClose}
             onNext={onNext}
             onPrev={onPrev}

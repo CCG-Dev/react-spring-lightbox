@@ -1,9 +1,12 @@
-import { animated, useSprings } from '@react-spring/web';
-import { useGesture } from 'react-use-gesture';
-import Image from '../Image';
 import React, { useEffect, useRef, useState } from 'react';
+
+import { useGesture } from 'react-use-gesture';
 import styled, { AnyStyledComponent } from 'styled-components';
+
+import { animated, useSprings } from '@react-spring/web';
+
 import type { ImagesList } from '../../../../types/ImagesList';
+import Image from '../Image';
 
 type IImagePager = {
     /** Index of image in images array that is currently shown */
@@ -16,6 +19,8 @@ type IImagePager = {
     images: ImagesList;
     /** Affects Width calculation method, depending on whether the Lightbox is Inline or not */
     inline: boolean;
+    /** A React component that is rendered when the image is loading */
+    loadingComponent?: React.ReactNode;
     /** Function that closes the Lightbox */
     onClose?: () => void;
     /** Function that can be called to disable dragging in the pager */
@@ -37,6 +42,7 @@ const ImagePager = ({
     imageStageHeight,
     imageStageWidth,
     inline,
+    loadingComponent,
     onClose,
     onNext,
     onPrev,
@@ -238,6 +244,7 @@ const ImagePager = ({
                                     imgProps={images[i]}
                                     inline={inline}
                                     isCurrentImage={i === currentIndex}
+                                    loadingComponent={loadingComponent}
                                     pagerHeight={pagerHeight}
                                     pagerIsDragging={isDragging}
                                     setDisableDrag={setDisableDrag}
