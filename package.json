@@ -36,7 +36,8 @@
         "lint:ts": "npx tsc --noEmit -p .",
         "test": "jest",
         "test:watch": "jest --watch",
-        "start": "rollup --config --watch"
+        "start": "rollup --config --watch",
+        "build": "rollup --config"
     },
     "husky": {
         "hooks": {

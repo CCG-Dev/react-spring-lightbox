@@ -9,20 +9,26 @@ type IImageProps = {
     isCurrentImage: boolean;
     /** A React component that is rendered when the image is loading */
     loadingComponent?: React.ReactNode;
+    /** Callback function to update the zoom level in the parent ImagePager */
+    onZoomLevelChange?: (zoomLevel: number) => void;
     /** Fixed height of the image stage, used to restrict maximum height of images */
     pagerHeight: '100%' | number;
     /** Indicates parent ImagePager is in a state of dragging, if true click to zoom is disabled */
     pagerIsDragging: boolean;
     /** Function that can be called to disable dragging in the pager */
     setDisableDrag: (disable: boolean) => void;
+    /** Show zoom icons on hover */
+    showZoomIconsOnHover?: boolean;
     /** Overrides the default behavior of double clicking causing an image zoom to a single click */
     singleClickToZoom: boolean;
+    /** Zoom level */
+    zoomLevel?: number;
 };
 /**
  * Animates pinch-zoom + panning on image using spring physics
  */
 declare const Image: {
-    ({ imgProps: { style: imgStyleProp, ...restImgProps }, inline, isCurrentImage, loadingComponent, pagerHeight, pagerIsDragging, setDisableDrag, singleClickToZoom, }: IImageProps): React.JSX.Element;
+    ({ imgProps: { style: imgStyleProp, ...restImgProps }, inline, isCurrentImage, loadingComponent, onZoomLevelChange, pagerHeight, pagerIsDragging, setDisableDrag, showZoomIconsOnHover, singleClickToZoom, zoomLevel, }: IImageProps): React.JSX.Element;
     displayName: string;
 };
 export default Image;

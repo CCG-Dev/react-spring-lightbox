@@ -21,16 +21,22 @@ type IImagePager = {
     onNext: () => void;
     /** True if this image is currently shown in pager, otherwise false */
     onPrev: () => void;
+    /** Callback function to update the zoom level in the parent ImagePager */
+    onZoomLevelChange?: (zoomLevel: number) => void;
     /** A React component that renders inside the image stage, useful for making overlays over the image */
     renderImageOverlay: () => React.ReactNode;
+    /** Show zoom icons on hover */
+    showZoomIconsOnHover?: boolean;
     /** Overrides the default behavior of double clicking causing an image zoom to a single click */
     singleClickToZoom: boolean;
+    /** Zoom level */
+    zoomLevel?: number;
 };
 /**
  * Gesture controlled surface that animates prev/next page changes via spring physics.
  */
 declare const ImagePager: {
-    ({ currentIndex, disableMouseWheel, images, imageStageHeight, imageStageWidth, inline, loadingComponent, onClose, onNext, onPrev, renderImageOverlay, singleClickToZoom, }: IImagePager): React.JSX.Element;
+    ({ currentIndex, disableMouseWheel, images, imageStageHeight, imageStageWidth, inline, loadingComponent, onClose, onNext, onPrev, onZoomLevelChange, renderImageOverlay, showZoomIconsOnHover, singleClickToZoom, zoomLevel, }: IImagePager): React.JSX.Element;
     displayName: string;
 };
 export default ImagePager;

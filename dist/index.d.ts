@@ -22,6 +22,8 @@ type ILightboxProps = {
     onNext: () => void;
     /** Function that changes currentIndex to previous image in images */
     onPrev: () => void;
+    /** Callback function to update the zoom level in the parent ImagePager */
+    onZoomLevelChange?: (zoomLevel: number) => void;
     /** React-Spring useTransition config for page open/close animation */
     pageTransitionConfig?: any;
     /** A React component that renders below the image pager */
@@ -38,10 +40,14 @@ type ILightboxProps = {
     renderPrevButton?: ({ canPrev }: {
         canPrev: boolean;
     }) => React.ReactNode;
+    /** Show zoom icons on hover */
+    showZoomIconsOnHover?: boolean;
     /** Overrides the default behavior of double clicking causing an image zoom to a single click */
     singleClickToZoom?: boolean;
     /** Inline styles that are applied to the root lightbox component */
     style?: React.CSSProperties;
+    /** Zoom level */
+    zoomLevel?: number;
 };
 /**
  * Gesture controlled lightbox that interpolates animations with spring physics.
@@ -57,5 +63,5 @@ type ILightboxProps = {
  * @see https://github.com/react-spring/react-spring
  * @see https://github.com/styled-components/styled-components
  */
-declare const Lightbox: ({ className, currentIndex, disableMouseWheel, images, inline, isOpen, loadingComponent, onClose, onNext, onPrev, pageTransitionConfig, renderFooter, renderHeader, renderImageOverlay, renderNextButton, renderPrevButton, singleClickToZoom, style, }: ILightboxProps) => React.JSX.Element;
+declare const Lightbox: ({ className, currentIndex, disableMouseWheel, images, inline, isOpen, loadingComponent, onClose, onNext, onPrev, onZoomLevelChange, pageTransitionConfig, renderFooter, renderHeader, renderImageOverlay, renderNextButton, renderPrevButton, showZoomIconsOnHover, singleClickToZoom, style, zoomLevel, }: ILightboxProps) => React.JSX.Element;
 export default Lightbox;
