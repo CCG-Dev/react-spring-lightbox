@@ -26,14 +26,20 @@ type IImageStageProps = {
     onNext: () => void;
     /** True if this image is currently shown in pager, otherwise false */
     onPrev: () => void;
+    /** Callback function to update the zoom level in the parent ImagePager */
+    onZoomLevelChange?: (zoomLevel: number) => void;
     /** A React component that renders inside the image stage, useful for making overlays over the image */
     renderImageOverlay: () => React.ReactNode;
     /** A React component that is used for next button in image pager */
     renderNextButton: ({ canNext }: { canNext: boolean }) => React.ReactNode;
     /** A React component that is used for previous button in image pager */
     renderPrevButton: ({ canPrev }: { canPrev: boolean }) => React.ReactNode;
+    /** Show zoom icons on hover */
+    showZoomIconsOnHover?: boolean;
     /** Overrides the default behavior of double clicking causing an image zoom to a single click */
     singleClickToZoom: boolean;
+    /** Zoom level */
+    zoomLevel?: number;
 };
 
 /**
@@ -49,17 +55,34 @@ const ImageStage = ({
     onClose,
     onNext,
     onPrev,
+    onZoomLevelChange,
     renderImageOverlay,
     renderNextButton,
     renderPrevButton,
+    showZoomIconsOnHover,
     singleClickToZoom,
+    zoomLevel,
 }: IImageStageProps) => {
     // Extra sanity check that the next/prev image exists before moving to it
     const canPrev = currentIndex > 0;
     const canNext = currentIndex + 1 < images.length;
 
-    const onNextImage = canNext ? onNext : () => null;
-    const onPrevImage = canPrev ? onPrev : () => null;
+    const onNextImage = canNext
+        ? () => {
+              onZoomLevelChange && onZoomLevelChange(1);
+              onNext?.();
+          }
+        : () => null;
+    const onPrevImage = canPrev
+        ? () => {
+              onZoomLevelChange && onZoomLevelChange(1);
+              onPrev?.();
+          }
+        : () => null;
+    const onCloseImage = () => {
+        onZoomLevelChange && onZoomLevelChange(1);
+        onClose?.();
+    };
 
     const [{ height: containerHeight, width: containerWidth }, containerRef] =
         useRefSize();
@@ -80,11 +103,14 @@ const ImageStage = ({
                     imageStageWidth={containerWidth}
                     inline={inline}
                     loadingComponent={loadingComponent}
-                    onClose={onClose}
+                    onClose={onCloseImage}
                     onNext={onNextImage}
                     onPrev={onPrevImage}
+                    onZoomLevelChange={onZoomLevelChange}
                     renderImageOverlay={renderImageOverlay}
+                    showZoomIconsOnHover={showZoomIconsOnHover}
                     singleClickToZoom={singleClickToZoom}
+                    zoomLevel={zoomLevel}
                 />
             ) : inline ? (
                 <SSRImagePager currentIndex={currentIndex} images={images} />

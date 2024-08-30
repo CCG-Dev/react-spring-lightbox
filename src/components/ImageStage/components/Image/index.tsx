@@ -1,9 +1,17 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, {
+    useEffect,
+    useRef,
+    useState,
+} from 'react';
 
 import { useGesture } from 'react-use-gesture';
 import styled, { AnyStyledComponent } from 'styled-components';
 
-import { animated, to, useSpring } from '@react-spring/web';
+import {
+    animated,
+    to,
+    useSpring,
+} from '@react-spring/web';
 
 import type { ImagesListItem } from '../../../../types/ImagesList';
 import {
@@ -28,14 +36,20 @@ type IImageProps = {
     isCurrentImage: boolean;
     /** A React component that is rendered when the image is loading */
     loadingComponent?: React.ReactNode;
+    /** Callback function to update the zoom level in the parent ImagePager */
+    onZoomLevelChange?: (zoomLevel: number) => void;
     /** Fixed height of the image stage, used to restrict maximum height of images */
     pagerHeight: '100%' | number;
     /** Indicates parent ImagePager is in a state of dragging, if true click to zoom is disabled */
     pagerIsDragging: boolean;
     /** Function that can be called to disable dragging in the pager */
     setDisableDrag: (disable: boolean) => void;
+    /** Show zoom icons on hover */
+    showZoomIconsOnHover?: boolean;
     /** Overrides the default behavior of double clicking causing an image zoom to a single click */
     singleClickToZoom: boolean;
+    /** Zoom level */
+    zoomLevel?: number;
 };
 
 /**
@@ -46,10 +60,13 @@ const Image = ({
     inline,
     isCurrentImage,
     loadingComponent,
+    onZoomLevelChange,
     pagerHeight,
     pagerIsDragging,
     setDisableDrag,
+    showZoomIconsOnHover,
     singleClickToZoom,
+    zoomLevel,
 }: IImageProps) => {
     const [isPanningImage, setIsPanningImage] = useState<boolean>(false);
     const [loading, setLoading] = useState<boolean>(true);
@@ -79,6 +96,18 @@ const Image = ({
             }
         },
     }));
+
+    useEffect(() => {
+        const scaleValue = scale.get();
+        const zoomLevelNumber = zoomLevel || 1;
+        if (zoomLevelNumber === scaleValue) return;
+        if (scaleValue < zoomLevelNumber) {
+            handleZoomIn(zoomLevelNumber - scaleValue);
+        }
+        if (scaleValue > zoomLevelNumber) {
+            handleZoomOut(scaleValue - zoomLevelNumber);
+        }
+    }, [zoomLevel]);
 
     // Reset scale of this image when dragging to new image in ImagePager
     useEffect(() => {
@@ -257,6 +286,7 @@ const Image = ({
             // If tapped while already zoomed-in, zoom out to default scale
             if (scale.get() !== 1) {
                 springApi.start(defaultImageTransform);
+                onZoomLevelChange && onZoomLevelChange(1);
                 return;
             }
 
@@ -276,6 +306,7 @@ const Image = ({
                     touchOrigin: [touchOriginX, touchOriginY],
                 },
             );
+            onZoomLevelChange && onZoomLevelChange(pinchScale);
 
             // Disable dragging in pager
             setDisableDrag(true);
@@ -291,11 +322,72 @@ const Image = ({
         ref: imageRef,
     });
 
+    const handleZoomIn = (scaleIncrease?: number) => {
+        // Zoom-in to origin of click on image
+        const pinchScale = scale.get() + (scaleIncrease || 0.5);
+        const pinchDelta = pinchScale - scale.get();
+
+        const touchOriginX = window.innerWidth / 2;
+        const touchOriginY = window.innerHeight / 2;
+
+        const [newTranslateX, newTranslateY] = getTranslateOffsetsFromScale({
+            currentTranslate: [translateX.get(), translateY.get()],
+            imageRef,
+            pinchDelta,
+            scale: scale.get(),
+            touchOrigin: [touchOriginX, touchOriginY],
+        });
+
+        onZoomLevelChange && onZoomLevelChange(pinchScale);
+
+        // Disable dragging in pager
+        setDisableDrag(true);
+        springApi.start({
+            pinching: true,
+            scale: pinchScale,
+            translateX: newTranslateX,
+            translateY: newTranslateY,
+        });
+    };
+
+    const handleZoomOut = (scaleDecrease?: number) => {
+        // Zoom-in to origin of click on image
+        if (scale.get() === 1) {
+            return;
+        }
+        const pinchScale = scale.get() - (scaleDecrease || 0.5);
+        const pinchDelta = pinchScale - scale.get();
+
+        const touchOriginX = window.innerWidth / 2;
+        const touchOriginY = window.innerHeight / 2;
+
+        const [newTranslateX, newTranslateY] = getTranslateOffsetsFromScale({
+            currentTranslate: [translateX.get(), translateY.get()],
+            imageRef,
+            pinchDelta,
+            scale: scale.get(),
+            touchOrigin: [touchOriginX, touchOriginY],
+        });
+
+        onZoomLevelChange && onZoomLevelChange(pinchScale);
+
+        // Disable dragging in pager
+        setDisableDrag(true);
+        springApi.start({
+            pinching: true,
+            scale: pinchScale,
+            translateX: newTranslateX,
+            translateY: newTranslateY,
+        });
+    };
+
     return (
         <>
             <AnimatedImage
+                $enableHoverZoom={showZoomIconsOnHover}
                 $inline={inline}
                 $loading={loading}
+                $scale={zoomLevel}
                 className="lightbox-image"
                 draggable="false"
                 onClick={(e: React.MouseEvent<HTMLImageElement>) => {
@@ -346,6 +438,15 @@ const AnimatedImage = styled(animated.img as AnyStyledComponent)`
     user-select: none;
     touch-action: ${({ $inline }) => (!$inline ? 'none' : 'pan-y')};
     transition: opacity 0.25s ease-out;
+    ${({ $enableHoverZoom, $scale }) => {
+        return `
+            ${
+                $enableHoverZoom &&
+                ($scale === 1 ? `cursor: zoom-in;` : `cursor: zoom-out;`)
+            }
+        
+        `;
+    }}
     ${({ $loading }) =>
         $loading
             ? `

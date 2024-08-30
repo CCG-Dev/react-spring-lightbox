@@ -1,29 +1,54 @@
 import * as React from 'react';
-import PropTypes from 'prop-types';
-import styled from 'styled-components';
-import { IoIosClose } from 'react-icons/io';
+
 import Color from 'color';
+import PropTypes from 'prop-types';
+import { IoIosClose } from 'react-icons/io';
+import styled from 'styled-components';
+
 import ButtonControl from './LightboxButtonControl';
 
-const LightboxHeader = ({ currentIndex, galleryTitle, images, onClose }) => (
-    <TopHeaderBar>
-        <LeftSideDescriptionContainer>
-            <GalleryHeading>{galleryTitle}</GalleryHeading>
-            <GallerySubheading>
-                {images[currentIndex].caption}
-            </GallerySubheading>
-        </LeftSideDescriptionContainer>
+const LightboxHeader = ({
+    currentIndex,
+    galleryTitle,
+    images,
+    onClose,
+    onZoomIn,
+    onZoomOut,
+    zoomLevel,
+}) => {
+    return (
+        <TopHeaderBar>
+            <LeftSideDescriptionContainer>
+                <GalleryHeading>{galleryTitle}</GalleryHeading>
+                <GallerySubheading>
+                    {images[currentIndex].caption}
+                </GallerySubheading>
+            </LeftSideDescriptionContainer>
 
-        <RightSideContainer>
-            <PageIndicator>
-                {currentIndex + 1} / {images.length}
-            </PageIndicator>
-            <CloseButton onClick={onClose} type="button">
-                <IoIosClose size={60} />
-            </CloseButton>
-        </RightSideContainer>
-    </TopHeaderBar>
-);
+            <RightSideContainer>
+                <div>
+                    <div>zoom level {zoomLevel}</div>
+                    <button onClick={onZoomIn} type="button">
+                        zoom In
+                    </button>
+                    <button
+                        disabled={zoomLevel === 1}
+                        onClick={onZoomOut}
+                        type="button"
+                    >
+                        zoom out
+                    </button>
+                </div>
+                <PageIndicator>
+                    {currentIndex + 1} / {images.length}
+                </PageIndicator>
+                <CloseButton onClick={onClose} type="button">
+                    <IoIosClose size={60} />
+                </CloseButton>
+            </RightSideContainer>
+        </TopHeaderBar>
+    );
+};
 
 LightboxHeader.propTypes = {
     currentIndex: PropTypes.number.isRequired,
@@ -38,6 +63,9 @@ LightboxHeader.propTypes = {
         }),
     ).isRequired,
     onClose: PropTypes.func.isRequired,
+    onZoomIn: PropTypes.func.isRequired,
+    onZoomOut: PropTypes.func.isRequired,
+    zoomLevel: PropTypes.number.isRequired,
 };
 
 export default LightboxHeader;

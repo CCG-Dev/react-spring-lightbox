@@ -1,6 +1,10 @@
 import React, { useEffect } from 'react';
 
-import { CreatePortal, ImageStage, PageContainer } from './components';
+import {
+    CreatePortal,
+    ImageStage,
+    PageContainer,
+} from './components';
 import type { ImagesList } from './types/ImagesList';
 
 export type ImagesListType = ImagesList;
@@ -26,6 +30,8 @@ type ILightboxProps = {
     onNext: () => void;
     /** Function that changes currentIndex to previous image in images */
     onPrev: () => void;
+    /** Callback function to update the zoom level in the parent ImagePager */
+    onZoomLevelChange?: (zoomLevel: number) => void;
     /** React-Spring useTransition config for page open/close animation */
     pageTransitionConfig?: any;
     /** A React component that renders below the image pager */
@@ -38,10 +44,14 @@ type ILightboxProps = {
     renderNextButton?: ({ canNext }: { canNext: boolean }) => React.ReactNode;
     /** A React component that is used for previous button in image pager */
     renderPrevButton?: ({ canPrev }: { canPrev: boolean }) => React.ReactNode;
+    /** Show zoom icons on hover */
+    showZoomIconsOnHover?: boolean;
     /** Overrides the default behavior of double clicking causing an image zoom to a single click */
     singleClickToZoom?: boolean;
     /** Inline styles that are applied to the root lightbox component */
     style?: React.CSSProperties;
+    /** Zoom level */
+    zoomLevel?: number;
 };
 
 /**
@@ -69,14 +79,17 @@ const Lightbox = ({
     onClose,
     onNext,
     onPrev,
+    onZoomLevelChange,
     pageTransitionConfig = null,
     renderFooter = () => null,
     renderHeader = () => null,
     renderImageOverlay = () => null,
     renderNextButton = () => null,
     renderPrevButton = () => null,
+    showZoomIconsOnHover = false,
     singleClickToZoom = false,
     style = {},
+    zoomLevel,
 }: ILightboxProps) => {
     // Handle event listeners for keyboard
     useEffect(() => {
@@ -138,10 +151,13 @@ const Lightbox = ({
             onClose={onClose}
             onNext={onNext}
             onPrev={onPrev}
+            onZoomLevelChange={onZoomLevelChange}
             renderImageOverlay={renderImageOverlay}
             renderNextButton={renderNextButton}
             renderPrevButton={renderPrevButton}
+            showZoomIconsOnHover={showZoomIconsOnHover}
             singleClickToZoom={singleClickToZoom}
+            zoomLevel={zoomLevel}
         />
     );
 

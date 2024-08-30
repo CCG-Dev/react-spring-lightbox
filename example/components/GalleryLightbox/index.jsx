@@ -36,6 +36,7 @@ class BlogImageGallery extends React.Component {
             clientSide: false,
             currentImageIndex: 0,
             lightboxIsOpen: false,
+            zoomLevel: 1,
         };
     }
 
@@ -54,10 +55,13 @@ class BlogImageGallery extends React.Component {
         this.setState({
             lightboxIsOpen: false,
         });
+        this.setState({ zoomLevel: 1 });
     };
 
     gotoPrevious = () => {
         const { currentImageIndex } = this.state;
+
+        this.setState({ zoomLevel: 1 });
 
         // If the current image isn't the first in the list, go to the previous
         if (currentImageIndex > 0) {
@@ -71,12 +75,18 @@ class BlogImageGallery extends React.Component {
         const { images } = this.props;
         const { currentImageIndex } = this.state;
 
+        this.setState({ zoomLevel: 1 });
+
         // If the current image isn't the list in the list, go to the next
         if (currentImageIndex + 1 < images.length) {
             this.setState({
                 currentImageIndex: currentImageIndex + 1,
             });
         }
+    };
+
+    onZoomChange = (zoomLevel) => {
+        this.setState({ zoomLevel });
     };
 
     /**
@@ -106,6 +116,18 @@ class BlogImageGallery extends React.Component {
             return newImage;
         });
 
+        const handleZoomIn = () => {
+            this.setState({ zoomLevel: this.state.zoomLevel + 0.5 });
+        };
+
+        const handleZoomOut = () => {
+            this.setState({ zoomLevel: this.state.zoomLevel - 0.5 });
+        };
+
+        const onChangeZoom = (zoomLevel) => {
+            console.log('onChangeZoom - zoomLevel', zoomLevel);
+            this.setState({ zoomLevel });
+        };
         return (
             <GalleryContainer>
                 {clientSide && (
@@ -127,12 +149,16 @@ class BlogImageGallery extends React.Component {
                     onClose={this.closeLightbox}
                     onNext={this.gotoNext}
                     onPrev={this.gotoPrevious}
+                    onZoomLevelChange={onChangeZoom}
                     renderHeader={() => (
                         <LightboxHeader
                             currentIndex={currentImageIndex}
                             galleryTitle={galleryTitle}
                             images={images}
                             onClose={this.closeLightbox}
+                            onZoomIn={handleZoomIn}
+                            onZoomOut={handleZoomOut}
+                            zoomLevel={this.state.zoomLevel}
                         />
                     )}
                     renderNextButton={({ canNext }) => (
@@ -149,7 +175,9 @@ class BlogImageGallery extends React.Component {
                             position="left"
                         />
                     )}
+                    showZoomIconsOnHover={true}
                     singleClickToZoom
+                    zoomLevel={this.state.zoomLevel}
                 />
             </GalleryContainer>
         );
