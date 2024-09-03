@@ -165,7 +165,6 @@ const ImagePager = ({
                     } else if (goToIndex < 0) {
                         onPrev();
                     }
-                    onZoomLevelChange?.(1);
                     return;
                 }
 
@@ -209,7 +208,6 @@ const ImagePager = ({
                     } else if (goToIndex < 0) {
                         onPrev();
                     }
-                    onZoomLevelChange?.(1);
                 }
             },
             onWheelEnd: () => {

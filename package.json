@@ -37,7 +37,8 @@
         "test": "jest",
         "test:watch": "jest --watch",
         "start": "rollup --config --watch",
-        "build": "rollup --config"
+        "build:types": "tsc --declaration --emitDeclarationOnly --outDir dist",
+        "build": "rollup --config && yarn build:types"
     },
     "husky": {
         "hooks": {

@@ -67,18 +67,9 @@ const ImageStage = ({
     const canPrev = currentIndex > 0;
     const canNext = currentIndex + 1 < images.length;
 
-    const onNextImage = canNext
-        ? () => {
-              onZoomLevelChange && onZoomLevelChange(1);
-              onNext?.();
-          }
-        : () => null;
-    const onPrevImage = canPrev
-        ? () => {
-              onZoomLevelChange && onZoomLevelChange(1);
-              onPrev?.();
-          }
-        : () => null;
+    const onNextImage = canNext ? onNext : () => null;
+    const onPrevImage = canPrev ? onPrev : () => null;
+
     const onCloseImage = () => {
         onZoomLevelChange && onZoomLevelChange(1);
         onClose?.();

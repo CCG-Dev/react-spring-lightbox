@@ -98,14 +98,17 @@ const Image = ({
     }));
 
     useEffect(() => {
-        const scaleValue = scale.get();
-        const zoomLevelNumber = zoomLevel || 1;
-        if (zoomLevelNumber === scaleValue) return;
-        if (scaleValue < zoomLevelNumber) {
-            handleZoomIn(zoomLevelNumber - scaleValue);
-        }
-        if (scaleValue > zoomLevelNumber) {
-            handleZoomOut(scaleValue - zoomLevelNumber);
+        if (isCurrentImage) {
+            const scaleValue = scale.get();
+
+            const zoomLevelNumber = zoomLevel || 1;
+            if (zoomLevelNumber === scaleValue) return;
+            if (scaleValue < zoomLevelNumber) {
+                handleZoomIn(zoomLevelNumber - scaleValue);
+            }
+            if (scaleValue > zoomLevelNumber) {
+                handleZoomOut(scaleValue - zoomLevelNumber);
+            }
         }
     }, [zoomLevel]);
 

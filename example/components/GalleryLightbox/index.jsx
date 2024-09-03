@@ -125,7 +125,6 @@ class BlogImageGallery extends React.Component {
         };
 
         const onChangeZoom = (zoomLevel) => {
-            console.log('onChangeZoom - zoomLevel', zoomLevel);
             this.setState({ zoomLevel });
         };
         return (
